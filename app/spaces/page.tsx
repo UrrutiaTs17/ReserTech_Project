@@ -3,6 +3,7 @@
 import { createClient } from "@/utils/supabase/client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function CapsulasPage() {
   const [capsulas, setCapsulas] = useState<any[] | null>(null);
@@ -30,16 +31,7 @@ export default function CapsulasPage() {
         Acerca de nuestros espacios
       </h1>
       <p className="text-primary-200 text-lg mb-10">
-        Descubre una nueva forma de gestionar y disfrutar los espacios
-        compartidos en tu comunidad con ReserTech. Diseñado para estudiantes,
-        residentes y trabajadores que valoran la organización, la comodidad y la
-        eficiencia, nuestro sistema te permite reservar salas, salones o
-        espacios de descanso de manera rápida y sin complicaciones. Consulta la
-        disponibilidad en tiempo real, accede a la normativa de cada espacio y
-        recibe notificaciones automáticas sobre tus reservas. Ya sea para
-        estudiar, reunirte o relajarte, ReserTech te ofrece el control y la
-        tranquilidad que necesitas para aprovechar al máximo tu tiempo y tu
-        entorno.
+        Descubre una nueva forma de gestionar y disfrutar los espacios...
       </p>
       <ul
         className="
@@ -61,30 +53,42 @@ export default function CapsulasPage() {
           }) => (
             <li
               key={id}
-              className="w-full bg-gray-300 bg-opacity-20 rounded-md p-6 shadow-md text-black"
+              className="w-full bg-gray-300 bg-opacity-20 rounded-md p-6 shadow-md text-black flex flex-col justify-between"
             >
-              <h2 className="text-xl font-semibold mb-2">{name}</h2>
-              <p className="mb-2">{description}</p>
-              <p className="mb-1">
-                Capacidad máxima:{" "}
-                <span className="font-bold">{maxCapacity} personas</span>
-              </p>
-              <p className="text-lg font-semibold">
-                Precio:{" "}
-                {discount > 0 ? (
-                  <>
-                    <span className="text-red-600">
-                      ${regularPrice - discount}
-                    </span>{" "}
-                    <span className="line-through text-gray-500">
-                      ${regularPrice}
-                    </span>
-                  </>
-                ) : (
-                  <span>${regularPrice}</span>
-                )}{" "}
-                / hora
-              </p>
+              <div>
+                <h2 className="text-xl font-semibold mb-2">{name}</h2>
+                <p className="mb-2">{description}</p>
+                <p className="mb-1">
+                  Capacidad máxima:{" "}
+                  <span className="font-bold">{maxCapacity} personas</span>
+                </p>
+                <p className="text-lg font-semibold">
+                  Precio:{" "}
+                  {discount > 0 ? (
+                    <>
+                      <span className="text-red-600">
+                        ${regularPrice - discount}
+                      </span>{" "}
+                      <span className="line-through text-gray-500">
+                        ${regularPrice}
+                      </span>
+                    </>
+                  ) : (
+                    <span>${regularPrice}</span>
+                  )}{" "}
+                  / hora
+                </p>
+              </div>
+
+              {/* Botón para redirigir a reservar */}
+              <div className="text-right mt-4">
+                <Link
+                  href={`/reservation/${id}`}
+                  className="bg-accent-600 text-primary-900 px-4 py-2 rounded hover:bg-accent-500 transition"
+                >
+                  Reservar →
+                </Link>
+              </div>
             </li>
           )
         )}
