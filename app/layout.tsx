@@ -56,7 +56,7 @@ export default function RootLayout({
                     </Link>
                   </div>
                   <div className="flex gap-5 items-center font-semibold">
-                    <Link href="/spaces" className="hover:text-foreground/80">
+                    <Link href="/reservations" className="hover:text-foreground/80">
                     Reservas Activas
                     </Link>
                   </div>

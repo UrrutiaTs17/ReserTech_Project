@@ -26,7 +26,7 @@ export default function EspaciosPage() {
   }
 
 return (
-  <div className="max-w-7xl mx-auto px-6 sm:px-10 py-12 text-white">
+  <div className="max-w-10xl mx-auto px-6 sm:px-10 py-12 text-white">
     <h1 className="text-4xl font-extrabold mb-4 text-center tracking-tight">
       Acerca de nuestros espacios
     </h1>
@@ -56,6 +56,13 @@ return (
             className="bg-white/10 rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow flex flex-col justify-between"
           >
             <div>
+              <img
+                src={image}
+                alt={`Imagen de ${name}`}
+                width={500}
+                height={300}
+                className="w-full h-40 object-cover rounded-lg mb-4"
+              />
               <h2 className="text-xl font-semibold text-accent-500 mb-1">
                 {name}
               </h2>
@@ -79,7 +86,6 @@ return (
                 ) : (
                   <span className="text-white">${regularPrice}</span>
                 )}{" "}
-                / hora
               </p>
             </div>
 
