@@ -6,8 +6,8 @@
 ## 👨‍💻 Autores
 
 - [**William Andrés Urrutia Torres**](https://github.com/UrrutiaTs17) – Desarrollador principal  
-- [**Karen Dayana Mateus Gomez 2**](https://github.com/KarenMateus8) – Colaboradora frontend/backend  
-- [**Daniel Alejandro Ayala Vallejo 3**](https://github.com/DanieL111039) – Diseño y pruebas
+- [**Karen Dayana Mateus Gomez**](https://github.com/KarenMateus8) – Colaboradora frontend/backend  
+- [**Daniel Alejandro Ayala Vallejo**](https://github.com/DanieL111039) – Diseño y pruebas
 
 ---
 ## 🌐 Descripción general
