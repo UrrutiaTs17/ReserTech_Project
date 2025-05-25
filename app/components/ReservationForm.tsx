@@ -1,27 +1,24 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 
 export default function ReservationForm({
-  capsula,
+  espacio,
   user,
 }: {
-  capsula: any;
-  user: any;
+  espacio: any;
+  user: any; // ahora es directamente el email
 }) {
   const supabase = createClient();
-  console.log("capsula", capsula);
-  console.log("user", user);
-  const userId = user?.id || null;
+
+  const userEmail = user; // directo del prop
   const [fechaReserva, setFechaReserva] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [numPersonas, setNumPersonas] = useState(capsula.maxCapacity);
+  const [numPersonas, setNumPersonas] = useState(espacio.maxCapacity);
   const [observations, setObservations] = useState("");
   const [mensaje, setMensaje] = useState("");
-
-  // Validación de usuario externo, si usas auth, pasa el userId desde la página padre
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -30,7 +27,6 @@ export default function ReservationForm({
       return;
     }
 
-    // Validar fecha no anterior a hoy
     const hoy = new Date();
     const fechaIngresada = new Date(fechaReserva);
     fechaIngresada.setHours(0, 0, 0, 0);
@@ -41,7 +37,6 @@ export default function ReservationForm({
       return;
     }
 
-    // Validar hora fin mayor que hora inicio
     const [hInicio, mInicio] = startTime.split(":").map(Number);
     const [hFin, mFin] = endTime.split(":").map(Number);
 
@@ -57,13 +52,13 @@ export default function ReservationForm({
     }
 
     const { error } = await supabase.from("reservas").insert({
-      cabinId: capsula.id, // entero
-      userId: "user", // entero
-      fechaReserva: fechaReserva, // date en formato 'YYYY-MM-DD'
-      startTime, // string tipo 'HH:mm'
-      EndTime: endTime, // string tipo 'HH:mm'
+      cabinId: espacio.id,
+      userEmail,
+      fechaReserva,
+      startTime,
+      EndTime: endTime,
       numPersonas,
-      cabinPrice: capsula.regularPrice,
+      cabinPrice: espacio.regularPrice - espacio.discount,
       isActive: true,
       observations,
     });
@@ -75,13 +70,13 @@ export default function ReservationForm({
       setFechaReserva("");
       setStartTime("");
       setEndTime("");
-      setNumPersonas(capsula.maxCapacity);
+      setNumPersonas(espacio.maxCapacity);
       setObservations("");
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4 max-w-md">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md">
       <label>
         Fecha de reserva:
         <input
@@ -98,7 +93,15 @@ export default function ReservationForm({
         <input
           type="time"
           value={startTime}
-          onChange={(e) => setStartTime(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            setStartTime(value);
+
+            const [h, m] = value.split(":").map(Number);
+            const nuevaHora = (h + 2) % 24;
+            const horaFinal = `${nuevaHora.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
+            setEndTime(horaFinal);
+          }}
           required
           className="block w-full p-2 rounded border"
         />
@@ -107,6 +110,7 @@ export default function ReservationForm({
       <label>
         Hora fin:
         <input
+          disabled
           type="time"
           value={endTime}
           onChange={(e) => setEndTime(e.target.value)}
@@ -116,11 +120,21 @@ export default function ReservationForm({
       </label>
 
       <label>
+        Valor:
+        <input
+          disabled
+          type="number"
+          value={espacio.regularPrice - espacio.discount}
+          className="block w-full p-2 rounded border"
+        />
+      </label>
+
+      <label>
         Número de personas:
         <input
           type="number"
           min={1}
-          max={capsula.maxCapacity}
+          max={espacio.maxCapacity}
           value={numPersonas}
           onChange={(e) => setNumPersonas(parseInt(e.target.value))}
           required
@@ -128,19 +142,9 @@ export default function ReservationForm({
         />
       </label>
 
-      <label>
-        Observaciones:
-        <textarea
-          value={observations}
-          onChange={(e) => setObservations(e.target.value)}
-          className="block w-full p-2 rounded border"
-          rows={3}
-        />
-      </label>
-
       <button
         type="submit"
-        className="bg-accent-600 text-primary-900 py-2 rounded hover:bg-accent-500 transition"
+        className="bg-accent-500 text-primary-900 py-2 rounded hover:bg-accent-400 transition"
       >
         Reservar
       </button>

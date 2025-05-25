@@ -32,8 +32,6 @@ export default function Footer() {
         className="mb-4 hover:text-yellow-400 transition-colors">
           Contáctanos
         </Link>
-
-              <ThemeSwitcher />
       </div>
     </footer>
   );

@@ -8,6 +8,8 @@ import Link from "next/link";
 import "./globals.css";
 import Footer from "@/app/components/Footer";
 import Logo from "@/app/components/Logo";
+import bg from "@/public/bg.png";
+import Image from "next/image";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -37,12 +39,12 @@ export default function RootLayout({
       <body className="bg-background text-foreground">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
           <main className="min-h-screen flex flex-col items-center">
-            <div className="flex-1 w-full flex flex-col gap-20 items-center">
+            <div className="flex-1 w-full flex flex-col items-center">
               <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
                 <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
                   <div className="flex gap-5 items-center font-semibold">
@@ -53,16 +55,21 @@ export default function RootLayout({
                     Espacios Disponibles
                     </Link>
                   </div>
+                  <div className="flex gap-5 items-center font-semibold">
+                    <Link href="/spaces" className="hover:text-foreground/80">
+                    Reservas Activas
+                    </Link>
+                  </div>
                   {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
                 </div>
               </nav>
-              <div className="flex flex-col gap-20 max-w-5xl p-5">
+              <div className="flex flex-col max-w-5xl p-5 min-h-screen">
                 {children}
               </div>
               <Footer/>
             </div>
           </main>
-        </ThemeProvider>
+</ThemeProvider>
       </body>
     </html>
   );
