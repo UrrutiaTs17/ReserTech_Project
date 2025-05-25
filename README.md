@@ -1,104 +1,80 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# ReserTech
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+**ReserTech** es una aplicación web moderna que permite a los usuarios reservar espacios físicos dentro de una comunidad: salas de estudio, salas de reuniones, canchas deportivas, cápsulas de descanso, entre otros. La plataforma busca optimizar el uso de estos espacios a través de una interfaz intuitiva, validaciones inteligentes y un sistema de autenticación seguro.
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+---
+## 👨‍💻 Autores
 
-## Features
+- [**William Andrés Urrutia Torres**](https://github.com/UrrutiaTs17) – Desarrollador principal  
+- [**Karen Dayana Mateus Gomez 2**](https://github.com/KarenMateus8) – Colaboradora frontend/backend  
+- [**Daniel Alejandro Ayala Vallejo 3**](https://github.com/DanieL111039) – Diseño y pruebas
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+---
+## 🌐 Descripción general
 
-## Demo
+El proyecto fue construido con **Next.js 14** utilizando el nuevo enrutador de aplicaciones (App Router), estilizado con **Tailwind CSS**, y potenciado por **Supabase** como backend para la autenticación, base de datos y almacenamiento de imágenes. Está diseñado para ser **escalable, responsive** y amigable tanto para el administrador como para el usuario final.
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+---
 
-## Deploy to Vercel
+## 🚀 Funcionalidades principales
 
-Vercel deployment will guide you through creating a Supabase account and project.
+### 👤 Autenticación
+- Registro e inicio de sesión con **Supabase Auth**
+- Acceso a rutas protegidas solo para usuarios autenticados
+- Almacenamiento del correo electrónico del usuario como identificador en reservas
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+### 🗂 Espacios disponibles
+- Listado completo de todos los espacios con:
+  - Imagen
+  - Capacidad máxima
+  - Precio regular y con descuento
+  - Normativa del espacio
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+### 📝 Creación de reservas
+- Selección de fecha y hora
+- Autocompletado de hora final (+2 horas)
+- Validación:
+  - No se puede reservar en fechas pasadas
+  - La hora final debe ser mayor a la inicial
+  - No puede haber **conflictos de horario** con otras reservas activas del mismo espacio
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+### 👥 Perfil de usuario
+- Visualización de información del usuario (correo)
+- Listado de todas las reservas activas hechas por el usuario
+- Opciones para **eliminar o editar** una reserva
+- Visualización clara del espacio reservado, incluyendo imagen y datos
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+### 🛠 Edición de reservas
+- Acceso mediante `/edit-reservation/[id]`
+- Formulario precargado con los datos actuales
+- Posibilidad de modificar fecha, hora y número de personas
+- Validación de conflictos al editar
 
-## Clone and run locally
+### 📋 Panel general de reservas
+- Vista completa de **todas las reservaciones activas** del sistema
+- Accesible por administradores
+- Se muestra nombre del espacio, fecha, hora, número de personas y valor
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+---
 
-2. Create a Next.js app using the Supabase Starter template npx command
+## 🧰 Tecnologías utilizadas
 
-   ```bash
-   npx create-next-app --example with-supabase with-supabase-app
-   ```
+- **Next.js 14**
+- **Tailwind CSS**
+- **Supabase**:
+  - Auth
+  - PostgreSQL
+  - Storage (para imágenes)
+- **TypeScript**
+- **Vercel** (para despliegue)
 
-   ```bash
-   yarn create next-app --example with-supabase with-supabase-app
-   ```
+---
 
-   ```bash
-   pnpm create next-app --example with-supabase with-supabase-app
-   ```
+## 🛠 Instalación local
 
-3. Use `cd` to change into the app's directory
+1. Clonar el repositorio:
 
-   ```bash
-   cd with-supabase-app
-   ```
+```bash
+git clone https://github.com/UrrutiaTs17/ReserTech_Project.git
+cd ReserTech_Project
 
-4. Rename `.env.example` to `.env.local` and update the following:
-
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
-   ```
-
-   Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)
-
-5. You can now run the Next.js local development server:
-
-   ```bash
-   npm run dev
-   ```
-
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
-
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
-
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
-
-## Feedback and issues
-
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
-
-## More Supabase examples
-
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
