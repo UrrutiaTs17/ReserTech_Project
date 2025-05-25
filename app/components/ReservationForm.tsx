@@ -8,11 +8,11 @@ export default function ReservationForm({
   user,
 }: {
   espacio: any;
-  user: any; // ahora es directamente el email
+  user: any;
 }) {
   const supabase = createClient();
+  const userEmail = user;
 
-  const userEmail = user; // directo del prop
   const [fechaReserva, setFechaReserva] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
@@ -22,6 +22,7 @@ export default function ReservationForm({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
     if (!fechaReserva || !startTime || !endTime || !numPersonas) {
       setMensaje("Por favor, completa todos los campos.");
       return;
@@ -48,6 +49,36 @@ export default function ReservationForm({
 
     if (fin <= inicio) {
       setMensaje("La hora de fin debe ser posterior a la hora de inicio.");
+      return;
+    }
+
+    // Validación de traslape
+    const { data: reservasExistentes, error: errorExistencia } = await supabase
+      .from("reservas")
+      .select("*")
+      .eq("cabinId", espacio.id)
+      .eq("fechaReserva", fechaReserva)
+      .eq("isActive", true);
+
+    if (errorExistencia) {
+      setMensaje("Error al verificar disponibilidad.");
+      return;
+    }
+
+    const conflicto = reservasExistentes?.some((reserva: any) => {
+      const [hI, mI] = reserva.startTime.split(":").map(Number);
+      const [hF, mF] = reserva.EndTime.split(":").map(Number);
+
+      const iniExist = new Date();
+      iniExist.setHours(hI, mI, 0, 0);
+      const finExist = new Date();
+      finExist.setHours(hF, mF, 0, 0);
+
+      return inicio < finExist && fin > iniExist;
+    });
+
+    if (conflicto) {
+      setMensaje("Ya existe una reserva para este espacio en ese rango de tiempo.");
       return;
     }
 
@@ -96,7 +127,6 @@ export default function ReservationForm({
           onChange={(e) => {
             const value = e.target.value;
             setStartTime(value);
-
             const [h, m] = value.split(":").map(Number);
             const nuevaHora = (h + 2) % 24;
             const horaFinal = `${nuevaHora.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
@@ -113,7 +143,6 @@ export default function ReservationForm({
           disabled
           type="time"
           value={endTime}
-          onChange={(e) => setEndTime(e.target.value)}
           required
           className="block w-full p-2 rounded border"
         />
@@ -141,10 +170,9 @@ export default function ReservationForm({
           className="block w-full p-2 rounded border"
         />
       </label>
-
       <button
         type="submit"
-        className="bg-accent-500 text-primary-900 py-2 rounded hover:bg-accent-400 transition"
+        className="bg-gray-600 bg-accent-500 text-primary-900 py-2 rounded hover:bg-gray-700 bg-accent-400 transition"
       >
         Reservar
       </button>

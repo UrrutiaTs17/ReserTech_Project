@@ -19,7 +19,7 @@ export default async function ReservationPage({ params }: Props) {
     .single();
 
   if (error || !espacio) {
-    return <p className="text-white">Cápsula no encontrada</p>;
+    return <p className="text-white">Espacio no encontrado</p>;
   }
 
   const userdata = await createClient();
@@ -39,6 +39,10 @@ export default async function ReservationPage({ params }: Props) {
         <div className="w-full sm:w-1/2 flex flex-col justify-center p-4 bg-primary-800 rounded">
           <ReservationForm espacio={espacio} user={user?.email} />
         </div>
+      </div>
+      <div className="mt-6 p-4 border border-gray-700 bg-gray-900 rounded text-sm text-white whitespace-pre-wrap">
+        <h3 className="text-lg font-semibold mb-2">Normativa del espacio</h3>
+        {espacio.normativa}
       </div>
     </div>
   );
