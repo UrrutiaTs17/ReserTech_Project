@@ -48,7 +48,6 @@ function EspacioCard({ space }) {
 
         <div className="bg-primary-950 border-t border-t-primary-800 text-right">
           <Link
-            //href={`/capsulas/${id}`}
             href={`/espacios/${id}`}
             className="border-l border-primary-800 py-4 px-6 inline-block hover:bg-accent-600 transition-all hover:text-primary-900">
             Detalles y reserva &rarr;

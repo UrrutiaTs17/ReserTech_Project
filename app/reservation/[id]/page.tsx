@@ -1,12 +1,15 @@
-import Image from "next/image";
-import { createClient } from "@/utils/supabase/client";
+
+import ReservationForm from "@/app/components/ReservationForm";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 
 interface Props {
   params: { id: string };
 }
 
 export default async function ReservationPage({ params }: Props) {
-  const supabase = createClient();
+  const supabase = createServerComponentClient({ cookies });
+
   const { id } = params;
 
   const { data: capsula, error } = await supabase
@@ -16,41 +19,52 @@ export default async function ReservationPage({ params }: Props) {
     .single();
 
   if (error || !capsula) {
-    return <p className="text-white">Capsula no encontrada</p>;
+    return <p className="text-white">Cápsula no encontrada</p>;
   }
 
-  const imageUrl = `https://mxzzaehovtdjgednbsxu.supabase.co/storage/v1/object/public/capsula-imagenes/${capsula.image}`;
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  /**Aaaaaa */
+  const imageUrl = capsula.image;
+
   return (
-    <div className="min-w-screen mx-auto p-6 min-h-screen text-white rounded">
+    <div className="w-full min-h-screen p-6 text-white">
       <h1 className="text-3xl font-bold mb-6">Reserva: {capsula.name}</h1>
-      <div className="flex gap-6">
-        <div className="relative w-64 h-40 rounded overflow-hidden border border-primary-800">
+      <div className="flex flex-col sm:flex-row gap-6">
+        <div className="w-full sm:w-1/2 rounded overflow-hidden border border-primary-800 h-max relative">
+          <img src={imageUrl} alt={`Imagen de ${capsula.name}`} />
         </div>
-        <div>
-          <p className="mb-2">{capsula.description}</p>
-          <p className="mb-2">
-            Capacidad máxima: <strong>{capsula.maxCapacity} personas</strong>
-          </p>
-          <p className="text-lg font-semibold">
-            Precio:{" "}
-            {capsula.discount > 0 ? (
-              <>
-                <span className="text-red-600">
-                  ${capsula.regularPrice - capsula.discount}
-                </span>{" "}
-                <span className="line-through text-gray-500">
-                  ${capsula.regularPrice}
-                </span>
-              </>
-            ) : (
-              <span>${capsula.regularPrice}</span>
-            )}{" "}
-            / hora
-          </p>
+        <div className="w-full sm:w-1/2">
+          <ReservationForm capsula={capsula} user={user} />
         </div>
+      </div>
+      <div>
+        <h2 className="text-2xl font-bold mt-6 mb-4">Detalles de la reserva</h2>
+        <p className="mb-2">
+          <strong>Descripción: </strong> {capsula.description}
+        </p>
+        <p className="mb-2">Fecha: <strong>{new Date().toLocaleDateString()}</strong></p>
+        <p className="mb-2">Hora de inicio: <strong>{new Date().toLocaleTimeString()}</strong></p>
+        <p className="mb-2">Duración: <strong>1 hora</strong></p>
+        <p className="text-lg font-semibold">
+          Precio total a pagar:{" "}
+          {capsula.discount > 0 ? (
+            <>
+              <span className="text-red-600">${capsula.regularPrice - capsula.discount}</span>{" "}
+              <span className="line-through text-gray-500">${capsula.regularPrice}</span>
+            </>
+          ) : (
+            <span>${capsula.regularPrice}</span>
+          )}{" "}
+          / hora
+        </p>
       </div>
     </div>
   );
 }
+
+
+
+
+

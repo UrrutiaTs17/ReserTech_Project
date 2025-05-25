@@ -22,7 +22,7 @@ export default function CapsulasPage() {
   }, []);
 
   if (!capsulas) {
-    return <p className="text-white">Cargando cápsulas...</p>;
+    return <p className="text-white">Cargando espacios...</p>;
   }
 
   return (
